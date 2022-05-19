@@ -49,7 +49,7 @@
             <select name="editTeamLeadDepartment" id="" >
                 <?php
                     $qSelect = mysqli_query($connect, 
-                        "SELECT * FROM  department"
+                        "SELECT * FROM  department WHERE departmentStatus = 'active'"
                     );
                     while($department = mysqli_fetch_array($qSelect)){
                         ?>
@@ -64,7 +64,7 @@
             <select name="editTeamLeadTeam" id="" style="margin-bottom: 1rem;">
                 <?php
                     $qSelect = mysqli_query($connect, 
-                        "SELECT * FROM team"
+                        "SELECT * FROM team WHERE teamStatus = 'active'"
                     );
                     while($department = mysqli_fetch_array($qSelect)){
                         ?>

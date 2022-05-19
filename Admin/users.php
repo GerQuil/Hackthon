@@ -271,7 +271,7 @@ session_start();
                         <select name="addTeamLeadDepartment" id="">
                             <?php
                                 $qSelect = mysqli_query($connect, 
-                                    "SELECT * FROM  department"
+                                    "SELECT * FROM  department WHERE departmentStatus = 'active'"
                                 );
                                 while($department = mysqli_fetch_array($qSelect)){
                                     ?>
@@ -287,7 +287,7 @@ session_start();
                         <select name="addTeamLeadTeam" id="">
                             <?php
                                 $qSelect = mysqli_query($connect, 
-                                    "SELECT * FROM team"
+                                    "SELECT * FROM team WHERE teamStatus = 'active'"
                                 );
                                 while($department = mysqli_fetch_array($qSelect)){
                                     ?>
