@@ -88,6 +88,45 @@ session_start();
                         <h6>Hybrid Schedule</h6>
                         <button type="button" class="btn btn-sm btn-primary" id="addHybrid" data-toggle="modal" data-target="#addHybridSchedule">Add Hybrid Schedule</button>
                     </div>
+                    <div class="hybridsched_table_wrap mt-2 rounded bg-white">
+                        <table class="hybridsched_schedule w-100">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 10%;">Hybrid Sched ID</th>
+                                    <th class="text-center" style="width: 15%;">Hybrid name</th>
+                                    <th class="text-center" style="width: 30%;">Inclusion days</th>
+                                    <th class="text-center" style="width: 15%;">Condition</th>
+                                    <th class="text-center" style="width: 30%;">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    $sql = "SELECT * FROM hybridschedule";
+                                    $query = mysqli_query($connect, $sql);
+                                    if(mysqli_num_rows($query) > 0) {
+                                        while($result = mysqli_fetch_assoc($query)){
+                                            if($result['hybridStatus'] == "active"){
+                                                echo "
+                                                    <tr>
+                                                        <td>".$result['hybridScheduleID']."</td>
+                                                        <td>".$result['hybridName']."</td>
+                                                        <td>".$result['inclusionDays']."</td>
+                                                        <td>".$result['cond']."</td>
+                                                        <td>
+                                                            <button hybridName='".$result['hybridName']."' hybridID='".$result['hybridScheduleID']."' class='btn btn-sm btn-warning editHybrid me-3' data-toggle='modal' data-target='#editHybridSchedule'>Edit</button>
+                                                            <button hybridID='".$result['hybridScheduleID']."' class='btn btn-sm btn-danger deleteHybrid' data-toggle='modal' data-target='#deleteHybridModal'>Delete</button>
+                                                        </td>
+                                                    </tr>
+
+                                                    
+                                                ";
+                                            }
+                                        }
+                                    }
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
         </div>
@@ -146,7 +185,8 @@ session_start();
             </div>
         </div>
     </div>
-    <!-- delete department Modal toggled by #deleteAdmin -->
+
+    <!-- delete shit Modal toggled by #deleteAdmin -->
     <div class="modal fade center" id="deleteShiftModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -303,6 +343,162 @@ session_start();
             </div>
         </div>
     </div>
+
+    <!-- edit HYBRID schedule modal -->
+    <div class="modal fade center" id="editHybridSchedule">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>edit a hybrid schedule</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex w-100 align-items-center justify-content-between">
+                        <div class="d-flex flex-column mb-2 w-50 me-3">
+                            <p class="label-modal text-muted mb-1 fs-6">Hybrid name convention</p>
+                            <input type="text" id="hybridNameEdit" placeholder="Team ABC">
+                        </div>
+                        <div class="d-flex flex-column mb-2 w-50 ms-3">
+                            <p class="label-modal text-muted mb-1 fs-6">Condition</p>
+                            <select id="conditionEdit" class="w-100 p-1">
+                                <option value="ONSITE">ONSITE</option>
+                                <option value="WFH">WFH</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    <div class="d-flex flex-column mb-3">
+                        <p class="label-modal text-muted mb-1 fs-6 text-center">Monday</p>
+                        <div class="choice_weekly d-flex justify-content-around align-items-center ms-2">
+                            <div class="d-flex justify-content-center align-items-center  me-3">
+                                <p class="label-modal text-muted mb-1 me-1">1st week</p>
+                                <input type="checkbox" id="mon_choice_first_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">2st week</p>
+                                <input type="checkbox" id="mon_choice_second_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">3rd week</p>
+                                <input type="checkbox" id="mon_choice_third_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">4th week</p>
+                                <input type="checkbox" id="mon_choice_4th_edit">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex flex-column mb-3">
+                        <p class="label-modal text-muted mb-1 fs-6 text-center">Tuesday</p>
+                        <div class="choice_weekly d-flex justify-content-around align-items-center ms-2">
+                            <div class="d-flex justify-content-center align-items-center  me-3">
+                                <p class="label-modal text-muted mb-1 me-1">1st week</p>
+                                <input type="checkbox" id="tue_choice_first_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">2st week</p>
+                                <input type="checkbox" id="tue_choice_second_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">3rd week</p>
+                                <input type="checkbox" id="tue_choice_third_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">4th week</p>
+                                <input type="checkbox" id="tue_choice_4th_edit">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex flex-column mb-3">
+                        <p class="label-modal text-muted mb-1 fs-6 text-center">Wednesday</p>
+                        <div class="choice_weekly d-flex justify-content-around align-items-center ms-2">
+                            <div class="d-flex justify-content-center align-items-center  me-3">
+                                <p class="label-modal text-muted mb-1 me-1">1st week</p>
+                                <input type="checkbox" id="wed_choice_first_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">2st week</p>
+                                <input type="checkbox" id="wed_choice_second_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">3rd week</p>
+                                <input type="checkbox" id="wed_choice_third_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">4th week</p>
+                                <input type="checkbox" id="wed_choice_4th_edit">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex flex-column mb-3">
+                        <p class="label-modal text-muted mb-1 fs-6 text-center">Thursday</p>
+                        <div class="choice_weekly d-flex justify-content-around align-items-center ms-2">
+                            <div class="d-flex justify-content-center align-items-center  me-3">
+                                <p class="label-modal text-muted mb-1 me-1">1st week</p>
+                                <input type="checkbox" id="thu_choice_first_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">2st week</p>
+                                <input type="checkbox" id="thu_choice_second_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">3rd week</p>
+                                <input type="checkbox" id="thu_choice_third_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">4th week</p>
+                                <input type="checkbox" id="thu_choice_4th_edit">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex flex-column mb-3">
+                        <p class="label-modal text-muted mb-1 fs-6 text-center">Friday</p>
+                        <div class="choice_weekly d-flex justify-content-around align-items-center ms-2">
+                            <div class="d-flex justify-content-center align-items-center  me-3">
+                                <p class="label-modal text-muted mb-1 me-1">1st week</p>
+                                <input type="checkbox" id="fri_choice_first_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">2st week</p>
+                                <input type="checkbox" id="fri_choice_second_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">3rd week</p>
+                                <input type="checkbox" id="fri_choice_third_edit">
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center me-3">
+                                <p class="label-modal text-muted mb-1 me-1">4th week</p>
+                                <input type="checkbox" id="fri_choice_4th_edit">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn">Cancel</button>
+                    <button id="editHybridButton" class="btn btn-danger">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- delete hybrid Modal toggled by #deleteAdmin -->
+    <div class="modal fade center" id="deleteHybridModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Do you want to delete selected hybrid schedule?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn">Cancel</button>
+                    <button id="deleteHybridButton" class="btn btn-danger">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -395,14 +591,371 @@ session_start();
     })
 
 // add a hybrid
+    $("#addHybridButton").click(function(){
+        var hybridName = $('#hybridNameAdd').val();
+        var inclusionDays = [];
+        var cond = $("#condition option:selected").val();
+        var monchecked1 = $("#mon_choice_first").prop("checked");
+        var monchecked2 = $("#mon_choice_second").prop("checked");
+        var monchecked3 = $("#mon_choice_third").prop("checked");
+        var monchecked4 = $("#mon_choice_4th").prop("checked");
+        
+        var tuechecked1 = $("#tue_choice_first").prop("checked");
+        var tuechecked2 = $("#tue_choice_second").prop("checked");
+        var tuechecked3 = $("#tue_choice_third").prop("checked");
+        var tuechecked4 = $("#tue_choice_4th").prop("checked");
 
-// bookmark
-    // $("#addHybridButton").click(function(){
-    //     var inlusionDays;
-    //     var 
-    //     if()
-    // });
+        var wedchecked1 = $("#wed_choice_first").prop("checked");
+        var wedchecked2 = $("#wed_choice_second").prop("checked");
+        var wedchecked3 = $("#wed_choice_third").prop("checked");
+        var wedchecked4 = $("#wed_choice_4th").prop("checked");
 
+        var thuchecked1 = $("#thu_choice_first").prop("checked");
+        var thuchecked2 = $("#thu_choice_second").prop("checked");
+        var thuchecked3 = $("#thu_choice_third").prop("checked");
+        var thuchecked4 = $("#thu_choice_4th").prop("checked");
+
+        var frichecked1 = $("#fri_choice_first").prop("checked");
+        var frichecked2 = $("#fri_choice_second").prop("checked");
+        var frichecked3 = $("#fri_choice_third").prop("checked");
+        var frichecked4 = $("#fri_choice_4th").prop("checked");
+
+
+        if(monchecked1 == false && monchecked2 == false && monchecked3 == false && monchecked4 == false){
+            
+        } else {
+            var monVal = "monday(";
+            if(monchecked1 == true){
+                monVal = monVal+"1-";;
+            }
+
+            if(monchecked2 == true){
+                monVal = monVal+"2-";
+            }
+
+            if(monchecked3 == true){
+                monVal = monVal+"3-";
+            }
+
+            if(monchecked4 == true){
+                monVal = monVal+"4";
+            }
+
+            monVal = monVal+")"
+            inclusionDays.push(monVal);
+        } 
+
+        if(tuechecked1 == false && tuechecked2 == false && tuechecked3 == false && tuechecked4 == false){
+            
+        } else {
+            var tueVal = "tuesday(";
+            if(tuechecked1 == true){
+                tueVal = tueVal+"1-";;
+            }
+
+            if(tuechecked2 == true){
+                tueVal = tueVal+"2-";
+            }
+
+            if(tuechecked3 == true){
+                tueVal = tueVal+"3-";
+            }
+
+            if(tuechecked4 == true){
+                tueVal = tueVal+"4";
+            }
+
+            tueVal = tueVal+")"
+            inclusionDays.push(tueVal);
+        }
+
+        if(wedchecked1 == false && wedchecked2 == false && wedchecked3 == false && wedchecked4 == false){
+            
+        } else {
+            var wedVal = "tuesday(";
+            if(wedchecked1 == true){
+                wedVal = wedVal+"1-";;
+            }
+
+            if(wedchecked2 == true){
+                wedVal = wedVal+"2-";
+            }
+
+            if(wedchecked3 == true){
+                wedVal = wedVal+"3-";
+            }
+
+            if(wedchecked4 == true){
+                wedVal = wedVal+"4";
+            }
+
+            wedVal = wedVal+")"
+            inclusionDays.push(wedVal);
+        }
+
+        if(thuchecked1 == false && thuchecked2 == false && thuchecked3 == false && thuchecked4 == false){
+            
+        } else {
+            var thuVal = "tuesday(";
+            if(thuchecked1 == true){
+                thuVal = thuVal+"1-";;
+            }
+
+            if(thuchecked2 == true){
+                thuVal = thuVal+"2-";
+            }
+
+            if(thuchecked3 == true){
+                thuVal = thuVal+"3-";
+            }
+
+            if(thuchecked4 == true){
+                thuVal = thuVal+"4";
+            }
+
+            thuVal = thuVal+")"
+            inclusionDays.push(thuVal);
+        }
+
+        if(frichecked1 == false && frichecked2 == false && frichecked3 == false && frichecked4 == false){
+            
+        } else {
+            var friVal = "tuesday(";
+            if(frichecked1 == true){
+                friVal = friVal+"1-";;
+            }
+
+            if(frichecked2 == true){
+                friVal = friVal+"2-";
+            }
+
+            if(frichecked3 == true){
+                friVal = friVal+"3-";
+            }
+
+            if(frichecked4 == true){
+                friVal = friVal+"4";
+            }
+
+            friVal = friVal+")"
+            inclusionDays.push(friVal);
+        }
+        
+        if(inclusionDays.length == 0 || hybridName == ""){
+            alert("Please provide all the necessary details");
+        } else {
+            $.ajax({
+                url: "schedule-control-logic.php",
+                type: "POST",
+                data: {
+                    actionID: "4",
+                    hybridN: hybridName,
+                    condition: cond,
+                    dayinclusion: ""+inclusionDays
+                },
+                success: function(data){
+                    location.reload();
+                }
+            })
+        }
+    });
+
+// set selected hybridID 
+    $(".editHybrid").click(function(){
+        selectedHybridID = $(this).attr("hybridID");
+        var hybridNameData = $(this).attr("hybridName")
+        $('#hybridNameEdit').val(hybridNameData);
+    })
+
+    $(".deleteHybrid").click(function(){
+        selectedHybridID = $(this).attr("hybridID");
+    })
+
+// update hybrid 
+    $("#editHybridButton").click(function(){
+        var hybridName = $('#hybridNameEdit').val();
+        var inclusionDays = [];
+        var cond = $("#conditionEdit option:selected").val();
+        var monchecked1 = $("#mon_choice_first_edit").prop("checked");
+        var monchecked2 = $("#mon_choice_second_edit").prop("checked");
+        var monchecked3 = $("#mon_choice_third_edit").prop("checked");
+        var monchecked4 = $("#mon_choice_4th_edit").prop("checked");
+        
+        var tuechecked1 = $("#tue_choice_first_edit").prop("checked");
+        var tuechecked2 = $("#tue_choice_second_edit").prop("checked");
+        var tuechecked3 = $("#tue_choice_third_edit").prop("checked");
+        var tuechecked4 = $("#tue_choice_4th_edit").prop("checked");
+
+        var wedchecked1 = $("#wed_choice_first_edit").prop("checked");
+        var wedchecked2 = $("#wed_choice_second_edit").prop("checked");
+        var wedchecked3 = $("#wed_choice_third_edit").prop("checked");
+        var wedchecked4 = $("#wed_choice_4th_edit").prop("checked");
+
+        var thuchecked1 = $("#thu_choice_first_edit").prop("checked");
+        var thuchecked2 = $("#thu_choice_second_edit").prop("checked");
+        var thuchecked3 = $("#thu_choice_third_edit").prop("checked");
+        var thuchecked4 = $("#thu_choice_4th_edit").prop("checked");
+
+        var frichecked1 = $("#fri_choice_first_edit").prop("checked");
+        var frichecked2 = $("#fri_choice_second_edit").prop("checked");
+        var frichecked3 = $("#fri_choice_third_edit").prop("checked");
+        var frichecked4 = $("#fri_choice_4th_edit").prop("checked");
+
+
+        if(monchecked1 == false && monchecked2 == false && monchecked3 == false && monchecked4 == false){
+            
+        } else {
+            var monVal = "monday(";
+            if(monchecked1 == true){
+                monVal = monVal+"1-";;
+            }
+
+            if(monchecked2 == true){
+                monVal = monVal+"2-";
+            }
+
+            if(monchecked3 == true){
+                monVal = monVal+"3-";
+            }
+
+            if(monchecked4 == true){
+                monVal = monVal+"4";
+            }
+
+            monVal = monVal+")"
+            inclusionDays.push(monVal);
+        } 
+
+        if(tuechecked1 == false && tuechecked2 == false && tuechecked3 == false && tuechecked4 == false){
+            
+        } else {
+            var tueVal = "tuesday(";
+            if(tuechecked1 == true){
+                tueVal = tueVal+"1-";;
+            }
+
+            if(tuechecked2 == true){
+                tueVal = tueVal+"2-";
+            }
+
+            if(tuechecked3 == true){
+                tueVal = tueVal+"3-";
+            }
+
+            if(tuechecked4 == true){
+                tueVal = tueVal+"4";
+            }
+
+            tueVal = tueVal+")"
+            inclusionDays.push(tueVal);
+        }
+
+        if(wedchecked1 == false && wedchecked2 == false && wedchecked3 == false && wedchecked4 == false){
+            
+        } else {
+            var wedVal = "tuesday(";
+            if(wedchecked1 == true){
+                wedVal = wedVal+"1-";;
+            }
+
+            if(wedchecked2 == true){
+                wedVal = wedVal+"2-";
+            }
+
+            if(wedchecked3 == true){
+                wedVal = wedVal+"3-";
+            }
+
+            if(wedchecked4 == true){
+                wedVal = wedVal+"4";
+            }
+
+            wedVal = wedVal+")"
+            inclusionDays.push(wedVal);
+        }
+
+        if(thuchecked1 == false && thuchecked2 == false && thuchecked3 == false && thuchecked4 == false){
+            
+        } else {
+            var thuVal = "tuesday(";
+            if(thuchecked1 == true){
+                thuVal = thuVal+"1-";;
+            }
+
+            if(thuchecked2 == true){
+                thuVal = thuVal+"2-";
+            }
+
+            if(thuchecked3 == true){
+                thuVal = thuVal+"3-";
+            }
+
+            if(thuchecked4 == true){
+                thuVal = thuVal+"4";
+            }
+
+            thuVal = thuVal+")"
+            inclusionDays.push(thuVal);
+        }
+
+        if(frichecked1 == false && frichecked2 == false && frichecked3 == false && frichecked4 == false){
+            
+        } else {
+            var friVal = "tuesday(";
+            if(frichecked1 == true){
+                friVal = friVal+"1-";;
+            }
+
+            if(frichecked2 == true){
+                friVal = friVal+"2-";
+            }
+
+            if(frichecked3 == true){
+                friVal = friVal+"3-";
+            }
+
+            if(frichecked4 == true){
+                friVal = friVal+"4";
+            }
+
+            friVal = friVal+")"
+            inclusionDays.push(friVal);
+        }
+        
+        if(inclusionDays.length == 0 || hybridName == ""){
+            alert("Please provide all the necessary details");
+        } else {
+            $.ajax({
+                url: "schedule-control-logic.php",
+                type: "POST",
+                data: {
+                    actionID: "6",
+                    hybridN: hybridName,
+                    condition: cond,
+                    dayinclusion: ""+inclusionDays,
+                    hybridID: selectedHybridID
+                },
+                success: function(data){
+                    location.reload();
+                }
+            })
+        }
+    });
+
+// delete hybrid
+    $("#deleteHybridButton").click(function(){
+        $.ajax({
+            url: "schedule-control-logic.php",
+            type: "POST",
+            data: {
+                actionID: "5",
+                hybridID: selectedHybridID
+            },
+            success: function(data){
+                location.reload();
+            }
+        })
+    })
 
     </script>
 </html>

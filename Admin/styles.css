@@ -95,7 +95,7 @@ tbody tr:hover {
     background-color: #ededed;
 }
 
-.admin_table_wrap, .shiftSched_table_wrap {
+.admin_table_wrap, .shiftSched_table_wrap, .hybridsched_table_wrap{
     overflow-y: auto;
     max-height: 65vh;
     min-height: 65vh;

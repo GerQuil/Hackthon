@@ -40,7 +40,30 @@
         <div class="header">
             <h4>Pay Information</h4>
         </div>
-        <div class="body"></div>
+        <div class="body">
+            <div class="rounded bg-white p-3 mt-4 shadow d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h6>Attendance Bonus</h6>
+                    <?php
+                        $sql = "SELECT * FROM attendancebonus";
+                        $query = mysqli_query($connect, $sql);
+                        if(mysqli_num_rows($query)){
+                            while($result=mysqli_fetch_assoc($query)){
+                                echo "<h5><strong>".$result['bonusPrice']."</strong></h5>";
+                            }
+                        }
+                    ?>
+                </div>
+                <button class="btn btn-warning" id="editAttendanceBonus">Edit</button>
+            </div>
+            <div class="rounded bg-white p-3 mt-4 shadow d-flex justify-content-between align-items-center mb-3">
+                <div class="header d-flex justify-content-between align-items-center w-100">
+                    <h6>Hazard pay</h6>
+                    <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addHybridSchedule">Add hazard pay information</button>
+                </div>
+               
+            </div>
+        </div>
     </section>
 </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
