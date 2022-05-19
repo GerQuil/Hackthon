@@ -1,3 +1,33 @@
+<?php
+  date_default_timezone_set("Asia/Manila");
+  $link = mysqli_connect("localhost", "root", "");
+      
+  if($link){
+    mysqli_select_db($link, "employeetracker"); 
+  }else{
+    echo"error"; 
+    die;
+  }
+
+
+  if(isset($_POST['login'])){
+    $email =  $_POST['email'];
+    $password =  $_POST['password'];
+    $qSelect = mysqli_query($link,
+        "SELECT * FROM teamlead WHERE leadEmail = '{$email}' AND leadPassword = '{$password}'"
+    );
+    if(mysqli_num_rows($qSelect) > 0){
+        while($teamlead = mysqli_fetch_array($qSelect)){
+            $_SESSION['leadid'] = $teamlead['leadID'];
+            header('location: TeamLead/index.php');
+            exit;
+        }
+    }
+
+
+  }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +41,7 @@
 <body>
     <center style="position:relative; top: 10rem;">
         <h2>Employee Tracker Login</h2><br>
-        <form method="POST" action="login.php">
+        <form action="index.php" method="POST" action="login.php">
             <input type="text" name="email" placeholder="Email/Username" required><br><br>
             <input type="password" name="password" placeholder="Password" required><br><br>
             <button class="btn-primary" type="submit" name="login">Login</button>
