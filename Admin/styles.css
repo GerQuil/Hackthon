@@ -101,7 +101,7 @@ tbody tr:hover {
     min-height: 65vh;
 }
 
-.department_table_wrap, .employee_table_wrap{
+.department_table_wrap, .employee_table_wrap, .dash_table_wrap{
     overflow-y: auto;
     max-height: 73vh;
     min-height: 73vh;

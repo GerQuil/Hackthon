@@ -40,7 +40,59 @@ session_start();
         <div class="header">
             <h4>Dashboard</h4>
         </div>
-        <div class="body"></div>
+        <div class="body">
+        <div class="dash_table_wrap mt-5 rounded bg-white">
+                <table class="dash_table w-100">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Department</th>
+                            <th class="text-center">Employee name</th>
+                            <th class="text-center">Shift Start</th>
+                            <th class="text-center">Shift End</th>
+                            <th class="text-center">Group/Team</th>
+                            <th class="text-center">On PTO</th>
+                            <th class="text-center">Holiday off</th>
+                            <th class="text-center">Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $sql = "SELECT * FROM attendance JOIN employee ON attendance.empID = employee.empID
+                            JOIN department ON attendance.departmentID = department.departmentID
+                            JOIN hybridschedule ON attendance.hybridSchedID = hybridschedule.hybridScheduleID ORDER BY department.departmentID ASC";
+                            $query = mysqli_query($connect, $sql);
+                            if(mysqli_num_rows($query) > 0) {
+                                while($result = mysqli_fetch_assoc($query)){
+                                    if($result['empStat'] == "active"){
+                                        echo "
+                                            <tr>
+                                                
+                                                <td>".$result['departmentName']."</td>
+                                                <td>".$result['empFName']." ".$result['empLName']."</td>
+                                                <td>".$result['start_time']."</td>
+                                                <td>".$result['end_time']."</td>
+                                                <td>".$result['hybridName']."</td>
+                                            ";
+                                        if($result["paidTimeOffID"] == 0){
+                                            echo "<td>N/A</td>";
+                                        } else if($result["paidTimeOffID"] == 1) {
+                                            echo "<td>PLANNED LEAVE</td>";
+                                        } else {
+                                            echo "<td>UNPLANNED LEAVE</td>";
+                                        }
+                                        echo"
+                                                <td>".$result['holiday']."</td>
+                                                <td>".$result['location']."</td>
+                                            </tr>
+                                        ";
+                                    }
+                                }
+                            }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </section>
 </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

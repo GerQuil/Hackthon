@@ -75,7 +75,7 @@
                                                 <td>".$result['empNumber']."</td>
                                                 <td>".$result['designation']."</td>
                                                 <td>
-                                                    <button empID='".$result['empID']."' deptName='".$result['departmentName']."' class='btn btn-sm btn-warning editDepartment me-3' data-toggle='modal' data-target='#editEmployeeModal'>Edit</button>
+                                                    <button empID='".$result['empID']."' deptName='".$result['departmentName']."' class='btn btn-sm btn-warning editEmployees me-3' data-toggle='modal' data-target='#editEmployeeModal'>Edit</button>
                                                     <button empID='".$result['empID']."' class='btn btn-sm btn-danger deleteEmployee' data-toggle='modal' data-target='#deleteEmployeeModal'>Delete</button>
                                                 </td>
                                             </tr>
@@ -128,15 +128,76 @@
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                         <div class="d-flex flex-column mb-3 w-50">
+                            <p class="label-modal text-muted mb-1 me-2">Gender</p>
+                            <select name="" id="addEmpGender">
+                                <option value="1">Male</option>
+                                <option value="0">Female</option>
+                            </select>
+                        </div>
+                        <div class="d-flex flex-column mb-3 w-50 ms-2 p-1">
+                            <p class="label-modal text-muted mb-1">Designation</p>
+                            <input type="text" id="addEmpdesignation" placeholder="e.g QA specialist">
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex flex-column mb-3 w-50">
                             <p class="label-modal text-muted mb-1 me-2">Number</p>
-                            <input type="number" id="addEmpEmail" placeholder="09391785412">
+                            <input type="number" id="addEmpNum" placeholder="12345678910">
                         </div>
                         <div class="d-flex flex-column mb-3 w-50 ms-2 p-1">
                             <p class="label-modal text-muted mb-1">Birthdate</p>
-                            <input type="date" id="addEmpEmail" placeholder="09391785412">
+                            <input type="date" id="addEmpbDate" >
                         </div>
                     </div>
-                    
+                    <hr>
+                    <div class="w-100 mb-3">
+                        <p class="label-modal text-muted mb-1">Department</p>
+                        <select name="" id="addEmpDepartment" class="w-100">
+                        <?php
+                                $qSelect = mysqli_query($connect, 
+                                    "SELECT * FROM  department WHERE departmentStatus = 'active'"
+                                );
+                                while($department = mysqli_fetch_array($qSelect)){
+                                    ?>
+                                        <option value="<?= $department['departmentID'] ?>"><?= $department['departmentName'] ?></option>
+                                    <?php
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div class="me-3">
+                            <p class="label-modal text-muted mb-1">Team</p>
+                            <select name="" id="addEmpTeam">
+                            <?php
+                                    $qSelect = mysqli_query($connect, 
+                                        "SELECT * FROM  team WHERE teamStatus = 'active'"
+                                    );
+                                    while($department = mysqli_fetch_array($qSelect)){
+                                        ?>
+                                            <option value="<?= $department['teamID'] ?>"><?= $department['teamName'] ?></option>
+                                        <?php
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="ms-3">
+                            <p class="label-modal text-muted mb-1">Team Lead</p>
+                            <select name="" id="addEmpTeamLead">
+                                <option value="" disabled selected>Select your option</option>
+                            <?php
+                                    $qSelect = mysqli_query($connect, 
+                                        "SELECT * FROM  teamlead WHERE leadStat = 'active'"
+                                    );
+                                    while($lead = mysqli_fetch_array($qSelect)){
+                                        ?>
+                                            <option class="teamleadDrop" teamID="<?= $lead['teamID'] ?>" value="<?= $lead['leadID'] ?>"><?= $lead['leadFName']." ". $lead['leadLName']?></option>
+                                        <?php
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
                     <hr>
                     <div class="d-flex flex-column mb-3">
                         <p class="label-modal text-muted mb-1">email</p>
@@ -149,7 +210,114 @@
                 </div>
                 <div class="modal-footer">
                     <button data-dismiss="modal" class="btn">Cancel</button>
-                    <button id="addAdminButton" class="btn btn-success">Continue</button>
+                    <button id="addEmployeeButton" class="btn btn-success">Continue</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- edit employee Modal toggled -->
+    <div class="modal fade center" id="editEmployeeModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Edit Employee</h5>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="d-flex flex-column mb-3">
+                        <p class="label-modal text-muted mb-1">First name</p>
+                        <input type="text" id="editEmpFname" placeholder="John">
+                    </div>
+                    <div class="d-flex flex-column mb-3">
+                        <p class="label-modal text-muted mb-1">Middle name</p>
+                        <input type="text" id="editEmpMname" placeholder="Summer">
+                    </div>
+                    <div class="d-flex flex-column mb-3">
+                        <p class="label-modal text-muted mb-1">Last name</p>
+                        <input type="text" id="editEmpLname" placeholder="Doe">
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex flex-column mb-3 w-50">
+                            <p class="label-modal text-muted mb-1 me-2">Gender</p>
+                            <select name="" id="editEmpGender">
+                                <option value="1">Male</option>
+                                <option value="0">Female</option>
+                            </select>
+                        </div>
+                        <div class="d-flex flex-column mb-3 w-50 ms-2 p-1">
+                            <p class="label-modal text-muted mb-1">Designation</p>
+                            <input type="text" id="editEmpdesignation" placeholder="e.g QA specialist">
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="d-flex flex-column mb-3 w-50">
+                            <p class="label-modal text-muted mb-1 me-2">Number</p>
+                            <input type="number" id="editEmpNum" placeholder="12345678910">
+                        </div>
+                        <div class="d-flex flex-column mb-3 w-50 ms-2 p-1">
+                            <p class="label-modal text-muted mb-1">Birthdate</p>
+                            <input type="date" id="editEmpbDate" >
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="w-100 mb-3">
+                        <p class="label-modal text-muted mb-1">Department</p>
+                        <select name="" id="editEmpDepartment" class="w-100">
+                        <?php
+                                $qSelect = mysqli_query($connect, 
+                                    "SELECT * FROM  department WHERE departmentStatus = 'active'"
+                                );
+                                while($department = mysqli_fetch_array($qSelect)){
+                                    ?>
+                                        <option value="<?= $department['departmentID'] ?>"><?= $department['departmentName'] ?></option>
+                                    <?php
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div class="me-3">
+                            <p class="label-modal text-muted mb-1">Team</p>
+                            <select name="" id="editEmpTeam">
+                            <?php
+                                    $qSelect = mysqli_query($connect, 
+                                        "SELECT * FROM team WHERE teamStatus = 'active'"
+                                    );
+                                    while($department = mysqli_fetch_array($qSelect)){
+                                        ?>
+                                            <option value="<?= $department['teamID'] ?>"><?= $department['teamName'] ?></option>
+                                        <?php
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="ms-3">
+                            <p class="label-modal text-muted mb-1">Team Lead</p>
+                            <select name="" id="editEmpTeamLead">
+                                <option value="" disabled selected>Select your option</option>
+                            <?php
+                                    $qSelect = mysqli_query($connect, 
+                                        "SELECT * FROM  teamlead WHERE leadStat = 'active'"
+                                    );
+                                    while($lead = mysqli_fetch_array($qSelect)){
+                                        ?>
+                                            <option class="teamleadDrops" teamID="<?= $lead['teamID'] ?>" value="<?= $lead['leadID'] ?>"><?= $lead['leadFName']." ". $lead['leadLName']?></option>
+                                        <?php
+                                    }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex flex-column mb-3">
+                        <p class="label-modal text-muted mb-1">email</p>
+                        <input type="email" id="editEmpEmail" placeholder="example123@email.com">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" class="btn">Cancel</button>
+                    <button id="editEmployeeButton" class="btn btn-success">Continue</button>
                 </div>
             </div>
         </div>
@@ -160,6 +328,7 @@
     <script type="text/javascript">
 
     var selectedEmployeeID;
+    
 // Logout action
     $(".logout").click(function(){
         $.ajax({
@@ -193,5 +362,130 @@
             }
         })
     })
+
+// Team to lead reference
+    $("#addEmpTeam").change(function(){
+        var selectedTeam = $("#addEmpTeam option:selected").val();
+        $(".teamleadDrop").each(function(){
+            var leadTeamData = $(this).attr("teamID");
+            if(selectedTeam == leadTeamData){
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        })
+        
+    })
+
+    $("#editEmpTeam").change(function(){
+        var selectedTeam = $("#editEmpTeam option:selected").val();
+        $(".teamleadDrops").each(function(){
+            var leadTeamData = $(this).attr("teamID");
+            if(selectedTeam == leadTeamData){
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        })
+        
+    })
+
+// trigger change
+    $("#addEmployee").click(function(){
+        $("#addEmpTeam").trigger("change");
+    })
+    $(".editEmployees").click(function(){
+        selectedEmployeeID = $(this).attr("empID");
+        $("#editEmpTeam").trigger("change");
+    })
+
+// Add employee
+    $("#addEmployeeButton").click(function(){
+        var addEmpFname = $("#addEmpFname").val();
+        var addEmpMname = $("#addEmpMname").val();
+        var addEmpLname = $("#addEmpLname").val();
+        var addEmpNum = $("#addEmpNum").val();
+        var addEmpEmail = $("#addEmpEmail").val();
+        var addEmpbDate = $("#addEmpbDate").val();
+        var addEmpPass = $("#addEmpPass").val();
+        var addEmpdesignation = $("#addEmpdesignation").val();
+        var addEmpGender = $("#addEmpGender option:selected").val();
+        var addEmpDepartment = $("#addEmpDepartment option:selected").val();
+        var addEmpTeam = $("#addEmpTeam option:selected").val();
+        var addEmpTeamLead = $("#addEmpTeamLead option:selected").val();
+        
+            if(addEmpFname == "" || addEmpMname == "" || addEmpLname == "" || addEmpNum == "" || addEmpEmail == "" || addEmpbDate == "" || 
+            addEmpPass == "" || addEmpDepartment == "" || addEmpTeam == "" || addEmpTeamLead == "" || addEmpdesignation == ""){
+                alert("Please fill in all the required fields");
+            } else {
+                $.ajax({
+                    url: "employee-control-logic.php",
+                    type: "POST",
+                    data: {
+                        actionID: "2",
+                        fname: addEmpFname,
+                        mname: addEmpMname,
+                        lname: addEmpLname,
+                        num: addEmpNum,
+                        email: addEmpEmail,
+                        bday: addEmpbDate,
+                        pass: addEmpPass,
+                        dept: addEmpDepartment,
+                        team: addEmpTeam,   
+                        teamlead: addEmpTeamLead,
+                        designation: addEmpdesignation,
+                        gender: addEmpGender
+                    },
+                    success: function(data){
+                        location.reload();
+                    }
+                })
+            }
+    })
+
+    // Add employee
+    $("#editEmployeeButton").click(function(){
+        var editEmpFname = $("#editEmpFname").val();
+        var editEmpMname = $("#editEmpMname").val();
+        var editEmpLname = $("#editEmpLname").val();
+        var editEmpNum = $("#editEmpNum").val();
+        var editEmpEmail = $("#editEmpEmail").val();
+        var editEmpbDate = $("#editEmpbDate").val();
+        var editEmpPass = $("#editEmpPass").val();
+        var editEmpdesignation = $("#editEmpdesignation").val();
+        var editEmpGender = $("#editEmpGender option:selected").val();
+        var editEmpDepartment = $("#editEmpDepartment option:selected").val();
+        var editEmpTeam = $("#editEmpTeam option:selected").val();
+        var editEmpTeamLead = $("#editEmpTeamLead option:selected").val();
+        
+            if(editEmpFname == "" || editEmpMname == "" || editEmpLname == "" || editEmpNum == "" || editEmpEmail == "" || editEmpbDate == "" || 
+            editEmpPass == "" || editEmpDepartment == "" || editEmpTeam == "" || editEmpTeamLead == "" || editEmpdesignation == ""){
+                alert("Please fill in all the required fields");
+            } else {
+                $.ajax({
+                    url: "employee-control-logic.php",
+                    type: "POST",
+                    data: {
+                        actionID: "3",
+                        fname: editEmpFname,
+                        mname: editEmpMname,
+                        lname: editEmpLname,
+                        num: editEmpNum,
+                        email: editEmpEmail,
+                        bday: editEmpbDate,
+                        dept: editEmpDepartment,
+                        team: editEmpTeam,   
+                        teamlead: editEmpTeamLead,
+                        designation: editEmpdesignation,
+                        gender: editEmpGender,
+                        empID: selectedEmployeeID
+                    },
+                    success: function(data){
+                        location.reload();
+                    }
+                })
+            }
+    })
+
     </script>
 </html>
