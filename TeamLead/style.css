@@ -1353,8 +1353,10 @@ h1 {
 
 .leadname {
   font-size: 18px;
+  font-weight: bold;
 }
 
 .overflow-auto {
   overflow: auto;
 }
+
