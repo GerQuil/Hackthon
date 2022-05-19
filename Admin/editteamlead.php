@@ -16,7 +16,6 @@
                 leadMName = '{$_POST['mname']}',
                 leadLName = '{$_POST['lname']}',
                 leadEmail = '{$_POST['email']}',
-                leadPassword = '{$_POST['password']}',
                 departmentID  = '{$_POST['editTeamLeadDepartment']}',
                 teamID  = '{$_POST['editTeamLeadTeam']}'
             WHERE leadid = '{$leadid}'; ");
@@ -45,7 +44,6 @@
         <input type="text" name="mname" value="<?= $teamlead['leadMName'] ?>" placeholder="Middle Name" >
         <input type="text" name="lname" value="<?= $teamlead['leadLName'] ?>" placeholder="Last Name"  >
         <input type="text" name="email" value="<?= $teamlead['leadEmail'] ?>" placeholder="Email"  >
-        <input type="text" name="password" value="" placeholder="Password"  >
         <div style="display: flex; justify-content: space-between;">
             <label class="">Department</label>
             <select name="editTeamLeadDepartment" id="" >
