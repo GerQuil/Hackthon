@@ -357,43 +357,7 @@ session_start();
     <!-- END OF CONFIRMATION MODAL -->
 
     <!-- add team lead Modal toggled by #addTeamLeadTrigger -->
-    <!-- <div class="modal fade center" id="addTeamLeadModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>Add Team Lead</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="d-flex flex-column mb-3">
-                        <p class="label-modal text-muted mb-1">First name</p>
-                        <input type="text" id="addAdminFname" placeholder="John">
-                    </div>
-                    <div class="d-flex flex-column mb-3">
-                        <p class="label-modal text-muted mb-1">Middle name</p>
-                        <input type="text" id="addAdminMname" placeholder="Summer">
-                    </div>
-                    <div class="d-flex flex-column mb-3">
-                        <p class="label-modal text-muted mb-1">Last name</p>
-                        <input type="text" id="addAdminLname" placeholder="Doe">
-                    </div>
-                    <hr>
-                    <div class="d-flex flex-column mb-3">
-                        <p class="label-modal text-muted mb-1">email</p>
-                        <input type="email" id="addAdminEmail" placeholder="example123@email.com">
-                    </div>
-                    <div class="d-flex flex-column mb-3">
-                        <p class="label-modal text-muted mb-1">Password</p>
-                        <input type="password" id="addAdminPass" placeholder="mypassword!">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button data-dismiss="modal" class="btn">Cancel</button>
-                    <button id="addAdminButton" class="btn btn-success">Continue</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
-
+    
 </body>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
