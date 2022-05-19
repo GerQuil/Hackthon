@@ -1,5 +1,6 @@
 <?php
   date_default_timezone_set("Asia/Manila");
+  session_start();
   $link = mysqli_connect("localhost", "root", "");
       
   if($link){
@@ -9,6 +10,10 @@
     die;
   }
 
+  if(isset($_SESSION['leadid'])){
+    header('location: TeamLead/index.php');
+    exit;
+  }
 
   if(isset($_POST['login'])){
     $email =  $_POST['email'];
@@ -16,14 +21,15 @@
     $qSelect = mysqli_query($link,
         "SELECT * FROM teamlead WHERE leadEmail = '{$email}' AND leadPassword = '{$password}'"
     );
+    echo mysqli_num_rows($qSelect);
     if(mysqli_num_rows($qSelect) > 0){
         while($teamlead = mysqli_fetch_array($qSelect)){
             $_SESSION['leadid'] = $teamlead['leadID'];
             header('location: TeamLead/index.php');
+            echo"<script>alert('not team lead')</script>";
             exit;
         }
     }
-
 
   }
 

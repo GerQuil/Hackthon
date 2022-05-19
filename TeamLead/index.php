@@ -1,14 +1,44 @@
 <?php
-  date_default_timezone_set("Asia/Manila");
-  $link = mysqli_connect("localhost", "root", "");
-      
-  if($link){
-    mysqli_select_db($link, "employeetracker"); 
-  }else{
-    echo"error"; 
-    die;
-  }
+    date_default_timezone_set("Asia/Manila");
+    session_start();
+    $link = mysqli_connect("localhost", "root", "");
+        
+    if($link){
+        mysqli_select_db($link, "employeetracker"); 
+    }else{
+        echo"error"; 
+        die;
+    }
 
+    if(isset($_GET['logout'])){
+        session_destroy();
+        header('location: ../index.php');
+        exit;
+    }
+
+    if(isset($_SESSION['leadid'])){
+        $leadid = $_SESSION['leadid'];
+    }else{
+        header('location: ../index.php');
+        exit;
+    }
+
+    $qSelect = mysqli_query($link,
+        "SELECT * 
+        FROM teamlead 
+        JOIN department
+        ON department.departmentID = teamlead.departmentID
+        JOIN  team
+        ON team.teamID = teamlead.teamID
+        WHERE leadID = '{$leadid}'"
+    );
+    if(mysqli_num_rows($qSelect) > 0){
+        while($teamlead = mysqli_fetch_array($qSelect)){
+            $name = $teamlead['leadFName'] . " " . $teamlead['leadMName'] . " " . $teamlead['leadLName'];
+            $department = $teamlead['departmentName'];
+            $team = $teamlead['teamName'];
+        }
+    }
 
 ?>
 <!DOCTYPE html>
@@ -53,14 +83,14 @@
         <div class="container">
             <div class="content-hbetween">
                 <div class="flex-v">
-                    <div class="department">Department Name</div>
-                    <div class="teamname">Team Name</div>
+                    <div class="department"><?= $department ?></div>
+                    <div class="teamname"><?= $team ?></div>
                 </div>
 
                 <div class="flex-h">
                     <div class="content-right">
-                        <div class="leadname">Lead Name</div>
-                        <a href="">LOGOUT</a>
+                        <div class="leadname"><?= $name ?></div>
+                        <a href="index.php?logout=1">LOGOUT</a>
                     </div>
                     
                 </div>
