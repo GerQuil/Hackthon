@@ -36,7 +36,9 @@
         while($teamlead = mysqli_fetch_array($qSelect)){
             $name = $teamlead['leadFName'] . " " . $teamlead['leadMName'] . " " . $teamlead['leadLName'];
             $department = $teamlead['departmentName'];
+            $departmentID = $teamlead['departmentID'];
             $team = $teamlead['teamName'];
+            $teamID = $teamlead['teamID'];
         }
     }
 
@@ -149,102 +151,123 @@
                         $qSelect = mysqli_query($link,
                             "SELECT * 
                             FROM employee 
-                            WHERE leadID = '{$leadid}'"
+                            WHERE leadID = '{$leadid}';"
                         );
                         if(mysqli_num_rows($qSelect) > 0){
                             while($emp = mysqli_fetch_array($qSelect)){
-                                ?>
-                                    <tr>
-                                        <td><?= $emp['empFName'] . " ". $emp['empMName'] . " ". $emp['empLName'] ?> <input type="hidden" name="empID" value="<?= $emp['empID'] ?>"></td>
-                                        <td>
-                                            <select name="shift" class="shift edit-select" data-live-search="true" data-width="auto ">
-                                                <?php
-                                                    $qShifts = mysqli_query($link,
-                                                        "SELECT * 
-                                                        FROM shiftschedule;"
-                                                    );
-                                                    while($shift = mysqli_fetch_array($qShifts)){
-                                                        ?>
-                                                            <option title="<?= date('h:i A', strtotime($shift['startTime'])) ?>-<?= date('h:i A', strtotime($shift['endTime'])) ?>" value="<?= $shift['scheduleID'] ?>"><?= date('h:i A', strtotime($shift['startTime'])) ?>-<?= date('h:i A', strtotime($shift['endTime'])) ?></option>
-                                                        <?php
-                                                    }
-                                                ?>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select name="team" class="team edit-select" data-live-search="true" data-width="auto">
-                                                <?php
-                                                    $qTeams = mysqli_query($link,
-                                                        "SELECT * 
-                                                        FROM hybridschedule;"
-                                                    );
-                                                    while($team = mysqli_fetch_array($qTeams)){
-                                                        $schedweeks = explode(", ", $team['inclusionDays']);
-                                                        foreach($schedweeks as $wSched){
-                                                            $removeRightParen = explode(")", $wSched);
-                                                            $schedperweek = explode("(", $removeRightParen[0]);
-                                                            $dayOfweek = $schedperweek[0];
-                                                            $weeksofmonth = $schedperweek[1];
-                                                            $weekofmonth = explode("-", $weeksofmonth);
-                                                            foreach($weekofmonth as $week){
-                                                                if($dayOfweek == strtolower(date('l'))){
-                                                                    if($week == weekOfMonth(date('Y-m-d')) ){
-                                                                        ?>
-                                                                            <option title="<?= $team['hybridName'] ?>" value="<?= $team['hybridScheduleID'] ?>"><?= $team['hybridName'] ?></option>
-                                                                        <?php                                                                      
-                                                                    }else if($week == 4 && $week < weekOfMonth(date('Y-m-d'))){
-                                                                        ?>
-                                                                            <option title="<?= $team['hybridName'] ?>" value="<?= $team['hybridScheduleID'] ?>"><?= $team['hybridName'] ?></option>
-                                                                        <?php                                                          
-                                                                    }
-                                                                }                                                                
-                                                            }
-                                                        }
-                                                    }
-                                                ?>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <!-- work type -->
-                                            <input type="hidden" name="worktype-select" class="worktype-select" value="1">
-                                            <div class="onsite-select">
-                                                <select name="worktype" class="worktype onsite edit-select" data-live-search="true" data-width="auto">
+                                $qcheck = mysqli_query($link, 
+                                    "SELECT * FROM employee 
+                                    JOIN attendance ON attendance.leadID = '{$leadid}' 
+                                    WHERE attendance.leadID = '{$leadid}' 
+                                    AND DAY(attendance.attendanceStamp) = DAY(CURRENT_DATE()) 
+                                    AND MONTH(attendance.attendanceStamp) = MONTH(CURRENT_DATE()) 
+                                    AND YEAR(attendance.attendanceStamp) = YEAR(CURRENT_DATE()) 
+                                    AND attendance.empID = '{$emp['empID']}'"
+                                );
+                                if(mysqli_num_rows($qcheck) == 0){
+                                    ?>
+                                        <tr>
+                                            <td><?= $emp['empFName'] . " ". $emp['empMName'] . " ". $emp['empLName'] ?> <input type="hidden" name="empID" value="<?= $emp['empID'] ?>"></td>
+                                            <td>
+                                                <select name="shift" class="shift edit-select" data-live-search="true" data-width="auto ">
                                                     <?php
-                                                        $qArea = mysqli_query($link,
+                                                        $qShifts = mysqli_query($link,
                                                             "SELECT * 
-                                                            FROM hazardPay;"
+                                                            FROM shiftschedule;"
                                                         );
-                                                        while($area = mysqli_fetch_array($qArea)){
+                                                        while($shift = mysqli_fetch_array($qShifts)){
                                                             ?>
-                                                                <option title="ONSITE-<?= $area['Area'] ?>" value="<?= $area['Area'] ?>">ONSITE-<?= $area['Area'] ?></option>
+                                                                <option title="<?= date('h:i A', strtotime($shift['startTime'])) ?>-<?= date('h:i A', strtotime($shift['endTime'])) ?>" value="<?= $shift['scheduleID'] ?>"><?= date('h:i A', strtotime($shift['startTime'])) ?>-<?= date('h:i A', strtotime($shift['endTime'])) ?></option>
                                                             <?php
                                                         }
                                                     ?>
                                                 </select>
-                                            </div>
-                                            <div class="wfh-select">
-                                                <select name="worktype" class="worktype wfh edit-select" data-width="auto" style="display: none;">
-                                                    <option value="WFH">WFH</option>
+                                            </td>
+                                            <td>
+                                                <select name="team" class="team edit-select" data-live-search="true" data-width="auto">
+                                                    <?php
+                                                        $qTeams = mysqli_query($link,
+                                                            "SELECT * 
+                                                            FROM hybridschedule;"
+                                                        );
+                                                        while($team = mysqli_fetch_array($qTeams)){
+                                                            $schedweeks = explode(", ", $team['inclusionDays']);
+                                                            foreach($schedweeks as $wSched){
+                                                                $removeRightParen = explode(")", $wSched);
+                                                                $schedperweek = explode("(", $removeRightParen[0]);
+                                                                $dayOfweek = $schedperweek[0];
+                                                                $weeksofmonth = $schedperweek[1];
+                                                                $weekofmonth = explode("-", $weeksofmonth);
+                                                                foreach($weekofmonth as $week){
+                                                                    if($dayOfweek == strtolower(date('l'))){
+                                                                        if($week == weekOfMonth(date('Y-m-d')) ){
+                                                                            ?>
+                                                                                <option title="<?= $team['hybridName'] ?>" value="<?= $team['hybridScheduleID'] ?>"><?= $team['hybridName'] ?></option>
+                                                                            <?php                                                                      
+                                                                        }else if($week == 4 && $week < weekOfMonth(date('Y-m-d'))){
+                                                                            ?>
+                                                                                <option title="<?= $team['hybridName'] ?>" value="<?= $team['hybridScheduleID'] ?>"><?= $team['hybridName'] ?></option>
+                                                                            <?php                                                          
+                                                                        }
+                                                                    }                                                                
+                                                                }
+                                                            }
+                                                        }
+                                                    ?>
                                                 </select>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <select name="pto" class="pto edit-select" data-width="auto">
-                                                <option value="0">NO LEAVE</option>
-                                                <option value="1">PLANNED LEAVE</option>
-                                                <option value="2">UNPLANNED LEAVE</option>
-                                            </select>
-                                        </td>
-                                        <td><input type="checkbox" name="holiday" class="holiday" value="holiday"></td>
-                                        <td>
-                                            <select name="address" class="address edit-select" data-width="auto">
-                                                <option value="WITHIN CEBU">WITHIN CEBU</option>
-                                                <option value="OUTSIDE CEBU">OUTSIDE CEBU</option>
-                                            </select>
-                                        </td>
-                                        <td><input type="submit" id="save" name="save" value="SAVE"></td>
-                                    </tr>
-                                <?php   
+                                            </td>
+                                            <td>
+                                                <!-- work type -->
+                                                <input type="hidden" name="worktype-select" class="worktype-select" value="1">
+                                                <div class="onsite-select">
+                                                    <select name="onsite" class="worktype onsite edit-select" data-live-search="true" data-width="auto">
+                                                        <?php
+                                                            $qArea = mysqli_query($link,
+                                                                "SELECT * 
+                                                                FROM hazardPay;"
+                                                            );
+                                                            while($area = mysqli_fetch_array($qArea)){
+                                                                ?>
+                                                                    <option title="ONSITE-<?= $area['Area'] ?>" value="<?= $area['Area'] ?>">ONSITE-<?= $area['Area'] ?></option>
+                                                                <?php
+                                                            }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                                <div class="wfh-select">
+                                                    <select name="wfh" class="worktype wfh edit-select" data-width="auto" style="display: none;">
+                                                        <option value="WFH">WFH</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <select name="pto" class="pto edit-select" data-live-search="true" data-width="auto">
+                                                    <option value="0">NO LEAVE</option>
+                                                    <?php
+                                                        $qPTO = mysqli_query($link,
+                                                            "SELECT * 
+                                                            FROM paidtimeoff;"
+                                                        );
+                                                        while($rPTO = mysqli_fetch_array($qPTO)){
+                                                            ?>
+                                                                <option value="<?= $rPTO['paidTimeOffID'] ?>"><?= $rPTO['paidTimeOffName'] ?></option>
+                                                            <?php
+                                                        }
+                                                    ?>
+                                                </select>
+                                            </td>
+                                            <td><input type="checkbox" name="holiday" class="holiday" value="holiday"></td>
+                                            <td>
+                                                <select name="address" class="address edit-select" data-width="auto">
+                                                    <option value="WITHIN CEBU">WITHIN CEBU</option>
+                                                    <option value="OUTSIDE CEBU">OUTSIDE CEBU</option>
+                                                </select>
+                                            </td>
+                                            <td><input type="submit" name="save" value="SAVE"></td>
+                                        </tr>
+                                    <?php   
+
+                                }
                             }
                         }
                     ?>
@@ -276,38 +299,32 @@
     $(document).ready(function(){
         $('.edit-select').selectpicker();
 
-        $('input[type="submit"]').click(function(){
-            var empID = $(this).closest('tr').find('input[name="empID"]').val();
-            console.log(empID);
-            
-        })
-
         var teamSel = null;
-        $('.team').on('change', function() {
+        $('select[name="team"]').on('change', function() {
             console.log( this.value );
+            var teamid=this.value;
             teamSel = $(this);
+
             $.ajax({
                 url:"checkWorkType.php",
                 method:"POST",
                 data:{
-                    hybridScheduleID: this.value
+                    hybridScheduleID: teamid
                 },
                 success:function(data)
                 {
                     console.log(data);
                     if(data == 'ONSITE'){
-                        console.log('aaaa')
-                        console.log(teamSel.closest('tr').find('.onsite-select').show());    
-                        console.log(teamSel.closest('tr').find('.wfh-select').hide());                   
-                        console.log(teamSel.closest('tr').find('.worktype-select').val('1'));                   
-                        console.log(teamSel.closest('tr').find('.worktype-select').val());                   
+                        teamSel.closest('tr').find('.onsite-select').show();    
+                        teamSel.closest('tr').find('.wfh-select').hide();                   
+                        teamSel.closest('tr').find('.worktype-select').val('1');                   
+                        // console.log(teamSel.closest('tr').find('.worktype-select').val());                   
                     }
                     if(data == 'WFH'){
-                        console.log('dasdasd')
-                        console.log(teamSel.closest('tr').find('.onsite-select').hide());   
-                        console.log(teamSel.closest('tr').find('.wfh-select').show());             
-                        console.log(teamSel.closest('tr').find('.worktype-select').val('0'));    
-                        console.log(teamSel.closest('tr').find('.worktype-select').val());    
+                        teamSel.closest('tr').find('.onsite-select').hide();   
+                        teamSel.closest('tr').find('.wfh-select').show();             
+                        teamSel.closest('tr').find('.worktype-select').val('0');    
+                        // console.log(teamSel.closest('tr').find('.worktype-select').val());    
                     }
                 }
             });
@@ -315,21 +332,42 @@
         });
 
         // save click
-        $('#save').click(function(){
+        var selectedTR = null;
+        $('input[type="submit"]').click(function(){
+            selectedTR = $(this).closest('tr');
             var empID = $(this).closest('tr').find('input[name="empID"]').val();
             var shift = $(this).closest('tr').find('select[name="shift"]').val();
-            var team = $(this).closest('tr').find('.team').val();
+            var team = $(this).closest('tr').find('select[name="team"]').val();
             var worktype = null;
             if($(this).closest('tr').find('.worktype-select').val() == 1){
-                worktype = $(this).closest('tr').find('.onsite').val();                
+                worktype = $(this).closest('tr').find('select[name="onsite"]').val();                
             }else if($(this).closest('tr').find('.worktype-select').val() == 0){
-                worktype = $(this).closest('tr').find('.wfh').val();        
+                worktype = $(this).closest('tr').find('select[name="wfh"]').val();        
             }
-            var pto = $(this).closest('tr').find('.pto').val();
+            var pto = $(this).closest('tr').find('select[name="pto"]').val();
             var holiday = $(this).closest('tr').find('.holiday').prop("checked");
-            var address = $(this).closest('tr').find('input[name="address"]').val();
-            console.log(shift)
+            var address = $(this).closest('tr').find('select[name="address"]').val();
 
+            var dataForm = new FormData();
+            dataForm.append("empID", empID);
+            dataForm.append("shift", shift);
+            dataForm.append("team", team);
+            dataForm.append("worktype", worktype);
+            dataForm.append("pto", pto);
+            dataForm.append("holiday", holiday);
+            dataForm.append("address", address);
+            dataForm.append("departmentID", '<?= $departmentID ?>');
+            dataForm.append("teamID", '<?= $teamID ?>');
+            dataForm.append("leadID", '<?= $leadid ?>');
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "attendance.php");
+            xhr.onload = function(){
+                console.log(this.response);
+                if(this.response == 'SUCCESS'){
+                    selectedTR.remove();
+                }
+            }
+            xhr.send(dataForm);
         })
 
     })

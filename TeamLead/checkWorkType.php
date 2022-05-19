@@ -12,7 +12,7 @@
     $hybridScheduleID = $_POST['hybridScheduleID'];
 
     $qArea = mysqli_query($link,
-        "SELECT * 
+        "SELECT *
         FROM hybridschedule
         WHERE hybridScheduleID = '{$hybridScheduleID}';"
     );
