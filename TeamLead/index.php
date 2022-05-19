@@ -151,7 +151,7 @@
                         $qSelect = mysqli_query($link,
                             "SELECT * 
                             FROM employee 
-                            WHERE leadID = '{$leadid}';"
+                            WHERE leadID = '{$leadid}' AND empStat = 'active';"
                         );
                         if(mysqli_num_rows($qSelect) > 0){
                             while($emp = mysqli_fetch_array($qSelect)){
@@ -188,10 +188,11 @@
                                                     <?php
                                                         $qTeams = mysqli_query($link,
                                                             "SELECT * 
-                                                            FROM hybridschedule;"
+                                                            FROM hybridschedule
+                                                            WHERE hybridStatus = 'active';"
                                                         );
                                                         while($team = mysqli_fetch_array($qTeams)){
-                                                            $schedweeks = explode(", ", $team['inclusionDays']);
+                                                            $schedweeks = explode(",", $team['inclusionDays']);
                                                             foreach($schedweeks as $wSched){
                                                                 $removeRightParen = explode(")", $wSched);
                                                                 $schedperweek = explode("(", $removeRightParen[0]);
@@ -224,7 +225,8 @@
                                                         <?php
                                                             $qArea = mysqli_query($link,
                                                                 "SELECT * 
-                                                                FROM hazardPay;"
+                                                                FROM hazardPay
+                                                                WHERE hazardPayStatus = 'active';"
                                                             );
                                                             while($area = mysqli_fetch_array($qArea)){
                                                                 ?>
