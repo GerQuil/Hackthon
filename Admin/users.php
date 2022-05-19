@@ -5,6 +5,20 @@ session_start();
         header("location: login.php");
         exit();     
     }
+
+
+
+    if(isset($_POST['addTeamLead'])){
+       $tlfname = $_POST['addTeamLeadFName'];
+       $tlmname = $_POST['addTeamLeadMName'];
+       $tllname = $_POST['addTeamLeadLName'];
+       $tlemail = $_POST['addTeamLeadEmail'];
+       $tlpass = $_POST['addTeamLeadPass'];
+       $tldepartment = $_POST['addTeamLeadDepartment'];
+       $tlteam = $_POST['addTeamLeadTeam'];
+
+       mysqli_query($connect, "INSERT INTO teamlead VALUES (null, $tldepartment, $tlteam, '$tlfname', '$tlmname', '$tllname', '$tlemail', '$tlpass', 'active' )");
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -71,9 +85,9 @@ session_start();
                                                 <td>".$result['adminID']."</td>
                                         "; 
                                             if($result['adminID'] == $_SESSION['adminID']){
-                                                echo "<td>".$result['adminFName']." ".$result['adminLName']." (You)</td>";
+                                                echo "<td>".$result['adminFName']." ".$result['adminMName']." ".$result['adminLName']." (You)</td>";
                                             } else {
-                                                echo "<td>".$result['adminFName']." ".$result['adminLName']."</td>";
+                                                echo "<td>".$result['adminFName']." ".$result['adminMName']." ".$result['adminLName']."</td>";
                                             }
                                         echo "
                                                 <td>".$result['adminEmail']."</td>
@@ -101,9 +115,50 @@ session_start();
                     </table>
                 </div>
             </div>
-            <div class="teamLead_list">
-                <h1>TeamLead</h1>
+            <!-- TEAM LEAD INTERFACE -->
+            <div class="teamLead_list admin_table_wrap mt-5 rounded bg-white h-75 ">
+                <table class="w-100">
+                    <thead>
+                        <tr>
+                            <th class="text-center">Lead ID</th>
+                            <th class="text-center">Lead Name</th>
+                            <th class="text-center">Lead Email</th>
+                            <th class="text-center">Department</th>
+                            <th class="text-center">Team</th>
+                            <th class="text-center">Account Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php 
+                            $sql = "SELECT * FROM teamlead
+                            JOIN department ON department.departmentID = teamlead.departmentID
+                            JOIN team ON team.teamID = teamlead.teamID
+                            WHERE leadStat = 'active';";
+                            $query = mysqli_query($connect, $sql);
+                            if(mysqli_num_rows($query) > 0) {
+                                while($result = mysqli_fetch_assoc($query)){
+                                    echo 
+                                    "<tr>
+                                        <td class='id'>".$result['leadID']."</td>
+                                        <td class='name'>".$result['leadFName']." ".$result['leadMName']." ".$result['leadLName']."</td>
+                                        <td class='email'>".$result['leadEmail']."</td>
+                                        <td class='department'>".$result['departmentName']."</td>
+                                        <td class='team'>".$result['teamName']."</td>
+                                        <td>
+                                            <div class='d-flex align-items-center justify-content-center'>  
+                                                <button id='editBasic' class='btn btn-sm btn-warning me-3 teamleadeditbtn' onclick='location.href=\"editteamlead.php?leadid=".$result['leadID']."\"'>Edit Info</button>
+                                                <button adminID='".$result['leadID']."' class='btn btn-sm btn-danger deletePrompt' data-toggle='modal' data-target='#deleteAdminModal' onclick='location.href=\"deleteteamlead.php?leadid=".$result['leadID']."\"'>Delete Account</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    ";
+                                }
+                            }
+                        ?>
+                    </tbody>
+                </table>
             </div>
+            <!-- END OF TEAM LEAD INTERFACE -->
         </div>
     </section>
 
@@ -179,51 +234,127 @@ session_start();
         </div>
     </div>
 
-    <!-- edit admin Modal toggled by #editBasic -->
-    <div class="modal fade center" id="changePassAdminModal">
+    <!-- TEAM LEAD ----------------------------------------------------------------------------------------------------------------->
+    <!-- TEAM LEAD ----------------------------------------------------------------------------------------------------------------->
+    <!-- TEAM LEAD ----------------------------------------------------------------------------------------------------------------->    
+    <div class="modal fade center" id="addTeamLeadModal">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <form action="users.php" method="post" class="modal-content">
                 <div class="modal-header">
-                    <h5>Edit password</h5>
+                    <h5>Edit Team Lead Information</h5>
                 </div>
                 <div class="modal-body">
-                    <p class="mb-2">You will be logged out if you successfully changed your password</p>
                     <div class="d-flex flex-column mb-3">
-                        <p class="label-modal text-muted mb-1">Current Password</p>
-                        <input type="password" id="curPass">
+                        <p class="label-modal text-muted mb-1">First name</p>
+                        <input type="text" name="addTeamLeadFName" id="addTeamLeadFName" placeholder="John" value="" required>
+                    </div>
+                    <div class="d-flex flex-column mb-3">
+                        <p class="label-modal text-muted mb-1">Middle name</p>
+                        <input type="text" name="addTeamLeadMName" id="addTeamLeadMName" placeholder="Summer" value="" required>
+                    </div>
+                    <div class="d-flex flex-column mb-3">
+                        <p class="label-modal text-muted mb-1">Last name</p>
+                        <input type="text" name="addTeamLeadLName" id="addTeamLeadLName" placeholder="Doe" value="" required>
                     </div>
                     <hr>
                     <div class="d-flex flex-column mb-3">
-                        <p class="label-modal text-muted mb-1">New password</p>
-                        <input type="password" id="newPass">
+                        <p class="label-modal text-muted mb-1">email</p>
+                        <input type="text" name="addTeamLeadEmail" id="addTeamLeadEmail" placeholder="example123@email.com" value="" required>
                     </div>
                     <div class="d-flex flex-column mb-3">
-                        <p class="label-modal text-muted mb-1">Confirm password</p>
-                        <input type="password" id="confirmPass">
+                        <p class="label-modal text-muted mb-1">password</p>
+                        <input type="text" name="addTeamLeadPass" id="addTeamLeadPass" placeholder="Password" value="" required>
+                    </div>
+                    <hr>
+                    <div class="d-flex flex-column mb-3">
+                        <p class="label-modal text-muted mb-1">Department</p>
+                        <select name="addTeamLeadDepartment" id="">
+                            <?php
+                                $qSelect = mysqli_query($connect, 
+                                    "SELECT * FROM  department"
+                                );
+                                while($department = mysqli_fetch_array($qSelect)){
+                                    ?>
+                                        <option value="<?= $department['departmentID'] ?>"><?= $department['departmentName'] ?></option>
+                                    <?php
+                                }
+                            ?>
+                        </select>
+                    </div>
+                    <hr>
+                    <div class="d-flex flex-column mb-3">
+                        <p class="label-modal text-muted mb-1">Team</p>
+                        <select name="addTeamLeadTeam" id="">
+                            <?php
+                                $qSelect = mysqli_query($connect, 
+                                    "SELECT * FROM team"
+                                );
+                                while($department = mysqli_fetch_array($qSelect)){
+                                    ?>
+                                        <option value="<?= $department['teamID'] ?>"><?= $department['teamName'] ?></option>
+                                    <?php
+                                }
+                            ?>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button data-dismiss="modal" class="btn">Cancel</button>
-                    <button id="changePassAdminButton" class="btn btn-success">Continue</button>
+                    <button type="submit" name="addTeamLead" id="addTeamLead" class="btn btn-success">Continue</button>
                 </div>
-            </div>
+            </form>
         </div>
-    </div>
+    <!-- END OF TEAM LEAD ----------------------------------------------------------------------------------------------------------------->
+    <!-- END OF TEAM LEAD ----------------------------------------------------------------------------------------------------------------->    
+    <!-- END OF TEAM LEAD ----------------------------------------------------------------------------------------------------------------->
 
-    <!-- delete admin Modal toggled by #deleteAdmin -->
-    <div class="modal fade center" id="deleteAdminModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5>Do you want to delete selected account?</h5>
-                </div>
-                <div class="modal-footer">
-                    <button data-dismiss="modal" class="btn">Cancel</button>
-                    <button id="deleteAdminButton" class="btn btn-danger">Continue</button>
+    <!-- CONFIRMATION MODALS -->
+        <!-- edit admin Modal toggled by #editBasic -->
+        <div class="modal fade center" id="changePassAdminModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Edit password</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p class="mb-2">You will be logged out if you successfully changed your password</p>
+                        <div class="d-flex flex-column mb-3">
+                            <p class="label-modal text-muted mb-1">Current Password</p>
+                            <input type="password" id="curPass">
+                        </div>
+                        <hr>
+                        <div class="d-flex flex-column mb-3">
+                            <p class="label-modal text-muted mb-1">New password</p>
+                            <input type="password" id="newPass">
+                        </div>
+                        <div class="d-flex flex-column mb-3">
+                            <p class="label-modal text-muted mb-1">Confirm password</p>
+                            <input type="password" id="confirmPass">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn">Cancel</button>
+                        <button id="changePassAdminButton" class="btn btn-success">Continue</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <!-- delete admin Modal toggled by #deleteAdmin -->
+        <div class="modal fade center" id="deleteAdminModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Do you want to delete selected account?</h5>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-dismiss="modal" class="btn">Cancel</button>
+                        <button id="deleteAdminButton" class="btn btn-danger">Continue</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- END OF CONFIRMATION MODAL -->
 
     <!-- add team lead Modal toggled by #addTeamLeadTrigger -->
     
@@ -386,6 +517,11 @@ session_start();
                 location.reload();
             }
         })
+    })
+
+    var selectedTeamLeadID = null;
+    $('.teamleadeditbtn').click(function(){
+        selectedTeamLeadID = $(this).attr('leadId');
     })
     </script>
 </html>
