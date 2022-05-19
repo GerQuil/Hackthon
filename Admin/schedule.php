@@ -186,7 +186,7 @@ session_start();
         </div>
     </div>
 
-    <!-- delete shit Modal toggled by #deleteAdmin -->
+    <!-- delete shift Modal toggled by #deleteAdmin -->
     <div class="modal fade center" id="deleteShiftModal">
         <div class="modal-dialog">
             <div class="modal-content">

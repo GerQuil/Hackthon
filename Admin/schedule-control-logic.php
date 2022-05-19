@@ -33,7 +33,7 @@
         $hybridName = $_POST['hybridN'];
         $condition = $_POST['condition'];
         $inclusiondays = $_POST['dayinclusion'];
-
+        
         $sql = "INSERT INTO hybridschedule(hybridName, inclusionDays, cond) VALUES ('".$hybridName."', '".$inclusiondays."', '".$condition."')";
         mysqli_query($connect, $sql);
     }
