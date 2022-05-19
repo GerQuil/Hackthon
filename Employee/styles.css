@@ -71,3 +71,19 @@ a {
     font-size: 12px;
     font-weight: 600;
 }
+#info-tile{
+    position: relative;
+    top: 30px;
+    box-shadow: 4px 4px 20px rgba(58, 86, 102, 0.1);
+    border: none;
+    border-radius: 20px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+}
+#months{
+    position: relative;
+    top: 20px;
+    border-radius: 5px;
+}
