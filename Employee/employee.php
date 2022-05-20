@@ -1,6 +1,10 @@
 <?php
     session_start();
     include('dbConnect.php');
+    if(! isset($_SESSION['empID'])){
+        header("location: login.php");
+        exit();     
+    }
     $first = $_SESSION['fName'];
     $last = $_SESSION['lName'];
 
@@ -20,6 +24,8 @@
     $hazard = 0;
     $hazardpay = 0;
     $ctr = 0;
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +41,7 @@
 <body>
     <div class="container">
         <h3 style="position: relative; top: 20px;">Welcome, <?= $first; ?> <?= $last; ?> </h3><br>
-        <a href="login.php?flag=logout"><span class="fa fa-sign-out"></span> Logout</a>
+        <a href="logout.php"><span class="fa fa-sign-out"></span> Logout</a>
         <div class="text-end">
             <b style="position: relative; top: 20px;">Filter by Month:</b>
             <select name="months" id="months">
