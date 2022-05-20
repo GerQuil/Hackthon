@@ -98,7 +98,7 @@ session_start();
                                         
                                         if($result['adminID'] == $_SESSION['adminID']) {
                                             echo "<button id='editBasic' class='btn btn-sm btn-warning me-3' data-toggle='modal' data-target='#editBasicAdminModal'>Edit Info</button>";
-                                            echo "<button id='changePass' class='btn btn-sm btn-warning me-3' data-toggle='modal' data-target='#changePassAdminModal'>Change Pass</button>";
+                                            echo "<button id='changePass' class='btn btn-sm btn-warning me-3' data-toggle='modal' data-target='#changePassAdminModals'>Change Pass</button>";
                                         }
 
                                         echo"
@@ -106,7 +106,6 @@ session_start();
                                                 </div></td>
                                             </tr>
                                         ";
-                                        
                                         
                                     }
                                 }
@@ -147,7 +146,7 @@ session_start();
                                         <td>
                                             <div class='d-flex align-items-center justify-content-center'>  
                                                 <button id='editBasic' class='btn btn-sm btn-warning me-3 teamleadeditbtn' onclick='location.href=\"editteamlead.php?leadid=".$result['leadID']."\"'>Edit Info</button>
-                                                <button adminID='".$result['leadID']."' class='btn btn-sm btn-danger deletePrompt' data-toggle='modal' data-target='#deleteAdminModal' onclick='location.href=\"deleteteamlead.php?leadid=".$result['leadID']."\"'>Delete Account</button>
+                                                <button adminID='".$result['leadID']."' class='btn btn-sm btn-danger deletePrompt' data-toggle='modal' data-target='#' onclick='location.href=\"deleteteamlead.php?leadid=".$result['leadID']."\"'>Delete Account</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -246,36 +245,36 @@ session_start();
                 <div class="modal-body">
                     <div class="d-flex flex-column mb-3">
                         <p class="label-modal text-muted mb-1">First name</p>
-                        <input type="text" name="addTeamLeadFName" id="addTeamLeadFName" placeholder="John" value="" required>
+                        <input type="text" name="addTeamLeadFName" placeholder="John" value="" required>
                     </div>
                     <div class="d-flex flex-column mb-3">
                         <p class="label-modal text-muted mb-1">Middle name</p>
-                        <input type="text" name="addTeamLeadMName" id="addTeamLeadMName" placeholder="Summer" value="" required>
+                        <input type="text" name="addTeamLeadMName" placeholder="Summer" value="" required>
                     </div>
                     <div class="d-flex flex-column mb-3">
                         <p class="label-modal text-muted mb-1">Last name</p>
-                        <input type="text" name="addTeamLeadLName" id="addTeamLeadLName" placeholder="Doe" value="" required>
+                        <input type="text" name="addTeamLeadLName"  placeholder="Doe" value="" required>
                     </div>
                     <hr>
                     <div class="d-flex flex-column mb-3">
                         <p class="label-modal text-muted mb-1">email</p>
-                        <input type="text" name="addTeamLeadEmail" id="addTeamLeadEmail" placeholder="example123@email.com" value="" required>
+                        <input type="text" name="addTeamLeadEmail" placeholder="example123@email.com" value="" required>
                     </div>
                     <div class="d-flex flex-column mb-3">
                         <p class="label-modal text-muted mb-1">password</p>
-                        <input type="text" name="addTeamLeadPass" id="addTeamLeadPass" placeholder="Password" value="" required>
+                        <input type="text" name="addTeamLeadPass" placeholder="Password" value="" required>
                     </div>
                     <hr>
                     <div class="d-flex flex-column mb-3">
                         <p class="label-modal text-muted mb-1">Department</p>
-                        <select name="addTeamLeadDepartment" id="">
+                        <select name="addTeamLeadDepartment" >
                             <?php
                                 $qSelect = mysqli_query($connect, 
                                     "SELECT * FROM  department WHERE departmentStatus = 'active'"
                                 );
                                 while($department = mysqli_fetch_array($qSelect)){
                                     ?>
-                                        <option value="<?= $department['departmentID'] ?>"><?= $department['departmentName'] ?></option>
+                                        <option value="<?= $department['departmentID'] ?>" ><?= $department['departmentName'] ?></option>
                                     <?php
                                 }
                             ?>
@@ -284,14 +283,14 @@ session_start();
                     <hr>
                     <div class="d-flex flex-column mb-3">
                         <p class="label-modal text-muted mb-1">Team</p>
-                        <select name="addTeamLeadTeam" id="">
+                        <select name="addTeamLeadTeam" >
                             <?php
                                 $qSelect = mysqli_query($connect, 
                                     "SELECT * FROM team WHERE teamStatus = 'active'"
                                 );
                                 while($department = mysqli_fetch_array($qSelect)){
                                     ?>
-                                        <option value="<?= $department['teamID'] ?>"><?= $department['teamName'] ?></option>
+                                        <option value="<?= $department['teamID'] ?>" ><?= $department['teamName'] ?></option>
                                     <?php
                                 }
                             ?>
@@ -300,17 +299,19 @@ session_start();
                 </div>
                 <div class="modal-footer">
                     <button data-dismiss="modal" class="btn">Cancel</button>
-                    <button type="submit" name="addTeamLead" id="addTeamLead" class="btn btn-success">Continue</button>
+                    <button type="submit" name="addTeamLead"  class="btn btn-success">Continue</button>
                 </div>
             </form>
         </div>
+    </div>
     <!-- END OF TEAM LEAD ----------------------------------------------------------------------------------------------------------------->
     <!-- END OF TEAM LEAD ----------------------------------------------------------------------------------------------------------------->    
     <!-- END OF TEAM LEAD ----------------------------------------------------------------------------------------------------------------->
 
     <!-- CONFIRMATION MODALS -->
         <!-- edit admin Modal toggled by #editBasic -->
-        <div class="modal fade center" id="changePassAdminModal">
+        
+        <div class="modal fade center" id="changePassAdminModals">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">

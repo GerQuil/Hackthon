@@ -171,7 +171,7 @@
                             <select name="" id="addEmpTeam">
                             <?php
                                     $qSelect = mysqli_query($connect, 
-                                        "SELECT * FROM  team WHERE teamStatus = 'active'"
+                                        "SELECT DISTINCT * FROM team JOIN teamLead ON team.teamID = teamlead.teamID WHERE teamStatus = 'active' GROUP BY teamName;"
                                     );
                                     while($department = mysqli_fetch_array($qSelect)){
                                         ?>
@@ -282,7 +282,7 @@
                             <select name="" id="editEmpTeam">
                             <?php
                                     $qSelect = mysqli_query($connect, 
-                                        "SELECT * FROM team WHERE teamStatus = 'active'"
+                                        "SELECT DISTINCT * FROM team JOIN teamLead ON team.teamID = teamlead.teamID WHERE teamStatus = 'active' GROUP BY teamName;"
                                     );
                                     while($department = mysqli_fetch_array($qSelect)){
                                         ?>
