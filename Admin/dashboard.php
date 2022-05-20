@@ -69,8 +69,8 @@ session_start();
                                                 
                                                 <td>".$result['departmentName']."</td>
                                                 <td>".$result['empFName']." ".$result['empLName']."</td>
-                                                <td>".$result['start_time']."</td>
-                                                <td>".$result['end_time']."</td>
+                                                <td>".date('h:i A', strtotime($result['start_time']))."</td>
+                                                <td>".date('h:i A', strtotime($result['end_time']))."</td>
                                                 <td>".$result['hybridName']."</td>
                                             ";
                                         if($result["paidTimeOffID"] == 0){

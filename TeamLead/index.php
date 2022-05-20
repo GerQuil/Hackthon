@@ -200,6 +200,8 @@
                                                                 $weeksofmonth = $schedperweek[1];
                                                                 $weekofmonth = explode("-", $weeksofmonth);
                                                                 foreach($weekofmonth as $week){
+                                                                    
+                                                                    echo $dayOfweek;
                                                                     if($dayOfweek == strtolower(date('l'))){
                                                                         if($week == weekOfMonth(date('Y-m-d')) ){
                                                                             ?>
@@ -348,6 +350,11 @@
             }
             var pto = $(this).closest('tr').find('select[name="pto"]').val();
             var holiday = $(this).closest('tr').find('.holiday').prop("checked");
+            if(holiday){
+                holiday = 'YES'
+            }else{
+                holiday = 'NO'
+            }
             var address = $(this).closest('tr').find('select[name="address"]').val();
 
             var dataForm = new FormData();
